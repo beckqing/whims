@@ -4,100 +4,6 @@
 </head>
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
-<script>
-let pointerMoved = false;
-let animation = true;
-
-function pointerMove(e){
-   pointerMoved = true
-   clientX = e.clientX
-   clientY = e.clientY
-}
-onmousemove = pointerMove;
-ontouchmove = pointerMove;
-
-function click(e){
-   animation = !animation;
-   if (animation==true) {
-      loop()
-   } else {
-      noLoop()
-   }
-}
-onclick = click;
-
-let particles = new Array();
-let particleGroup = d3.select('#particleGroup')
-
-function draw() {
-  if(particles.length < 200){
-     particles.push(new Particle())
-  }
-  for(let i = 0; i < particles.length; i++) {
-    particles[i].move();
-  }
-}
-
-class Vector {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-  
-  add(v) {
-    this.x += v.x;
-    this.y += v.y;
-  }
-}
-
-class Particle {
-  constructor(pos, vel, r, lifespan, color) {
-    if(pos != undefined) {
-      this.pos = pos;           // (x, y) position
-      this.vel = vel;           // (x, y) velocity
-      this.r = r;               // radius
-      this.lifespan = lifespan; // how long particle is alive
-      this.circle = particleGroup.append('circle')
-         .attr('cx', pos.x)
-         .attr('cy', pos.y)
-         .attr('r', r)
-         .attr('fill', 'white')
-    } else {
-      this.randomize();
-    }
-  }
-  
-  randomize() {
-    if (pointerMoved == false){
-       this.pos = new Vector(window.innerWidth/2, window.innerHeight/2);
-    } else {
-       this.pos = new Vector(mouseX, mouseY); // p5, mouse is touch compatible
-    }
-    this.vel = new Vector(Math.random() - .5, Math.random() - .5);
-    this.r = Math.random() * 50;
-    this.lifespan = Math.random() * 20 + 160;
-    this.circle = particleGroup.append('circle')
-         .attr('cx', this.pos.x)
-         .attr('cy', this.pos.y)
-         .attr('r', this.r)
-         .attr('fill', 'white')
-  }
-  
-  move() {
-    if(this.lifespan <= 0) {
-      this.circle.remove()
-      this.randomize();
-    } else {
-      this.pos.add(this.vel);
-      this.r = this.r - this.r/this.lifespan;
-      this.lifespan--;
-      this.circle.attr('cx', this.pos.x)
-         .attr('cy', this.pos.y)
-         .attr('r', this.r)
-    }
-  }
-}
-</script>
 <style>
 body,
 .bgImage {
@@ -105,6 +11,7 @@ body,
   height: 100%;
   width: 100%;
   overflow: hidden;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .bgImage {
@@ -132,11 +39,111 @@ body,
     	</filter>
     </defs>
 			<mask id="mask" x="0" y="0">
-				<g id="particleGroup" style="filter: url(#gooey)"></g>
+				<g id="particleGroup" style="filter: url(#gooey)">
+        </g>
 			</mask>
 	</svg>
 </body>
+<script>
+  let pointerMoved = false;
+  let animation = true;
+  
+  function pointerMove(e){
+     pointerMoved = true
+     clientX = e.clientX
+     clientY = e.clientY
 
+  }
+  onmousemove = pointerMove;
+  ontouchmove = pointerMove;
+  
+  function click(e){
+     animation = !animation;
+     if (animation==true) {
+        loop()
+     } else {
+        noLoop()
+     }
+  }
+  onclick = click;
+  
+  function setup(){
+    noCanvas()
+  }
+  
+  let particles = new Array();
+  let particleGroup = d3.select('#particleGroup')
+  let minWinDim = Math.min(window.innerWidth, window.innerHeight)
+
+  function draw() {
+    if(particles.length < 200){
+       particles.push(new Particle())
+    }
+    for(let i = 0; i < particles.length; i++) {
+      particles[i].move();
+    }
+  }
+  
+  class Vector {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+    
+    add(v) {
+      this.x += v.x;
+      this.y += v.y;
+    }
+  }
+  
+  class Particle {
+    constructor(pos, vel, r, lifespan, color) {
+      if(pos != undefined) {
+        this.pos = pos;           // (x, y) position
+        this.vel = vel;           // (x, y) velocity
+        this.r = r;               // radius
+        this.lifespan = lifespan; // how long particle is alive
+        this.circle = particleGroup.append('circle')
+           .attr('cx', pos.x)
+           .attr('cy', pos.y)
+           .attr('r', r)
+           .attr('fill', 'white')
+      } else {
+        this.randomize();
+      }
+    }
+    
+    randomize() {
+      if (pointerMoved == false){
+         this.pos = new Vector(window.innerWidth/2, window.innerHeight/2);
+      } else {
+         this.pos = new Vector(mouseX, mouseY); // p5, mouse is touch compatible
+      }
+      this.vel = new Vector(Math.random() - .5, Math.random() - .5);
+      this.r = Math.random() * minWinDim/8;
+      this.lifespan = Math.random() * 20 + 160;
+      this.circle = particleGroup.append('circle')
+           .attr('cx', this.pos.x)
+           .attr('cy', this.pos.y)
+           .attr('r', this.r)
+           .attr('fill', 'white')
+    }
+    
+    move() {
+      if(this.lifespan <= 0 || this.r - this.r/this.lifespan < 0) {
+        this.circle.remove()
+        this.randomize();
+      } else {
+        this.pos.add(this.vel);
+        this.r = this.r - this.r/this.lifespan;
+        this.lifespan--;
+        this.circle.attr('cx', this.pos.x)
+           .attr('cy', this.pos.y)
+           .attr('r', this.r)
+      }
+    }
+  }
+  </script>
 <!-- <> CREDIT
 svg gooey masking - https://codepen.io/cassie-codes/pen/zWJxXj
  >> modifications
