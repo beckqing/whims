@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<head>
+<title>🌇✈</title>
+</head>
+
+<style>
+body {
+   background-color: black;
+   margin: 0;
+}
+
+img {
+   position: absolute;
+   max-width: 100%;
+   max-height: 100%;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%,-50%);
+}
+</style>
+<body>
+<img id="img1" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/689d4c7d-b30a-46a6-a7dd-1dee4ecdbdcf/dfr6toa-1f1fa457-6d80-4f96-af5d-e5d29b699feb.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzY4OWQ0YzdkLWIzMGEtNDZhNi1hN2RkLTFkZWU0ZWNkYmRjZlwvZGZyNnRvYS0xZjFmYTQ1Ny02ZDgwLTRmOTYtYWY1ZC1lNWQyOWI2OTlmZWIuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.G1ld2kyqIojKyDXWGRHXoJR8MeU2VV9A_uwnvTpFf0M" />
+<img id="img2" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/689d4c7d-b30a-46a6-a7dd-1dee4ecdbdcf/dfr6to6-5fc18215-252d-41c7-a96b-bc7b6af316f3.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzY4OWQ0YzdkLWIzMGEtNDZhNi1hN2RkLTFkZWU0ZWNkYmRjZlwvZGZyNnRvNi01ZmMxODIxNS0yNTJkLTQxYzctYTk2Yi1iYzdiNmFmMzE2ZjMuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.sHeRipUXbo2oZsyGddF6lp9dUxEqbPCGxmbv49YRJZo" />
+</body>
+<script>
+var img2 = document.getElementById('img2');
+
+document.addEventListener('mousemove', function showCoords(event) {
+
+    var x = event.clientX;
+    // var y = event.clientY;
+    img2_width = img2.offsetWidth;
+    side_margin = (window.innerWidth - img2_width)/2;
+
+  // x y to be added and this whole bit to be cleaned but I am not thinking abt math rn
+    let opacity = 0;
+    if (x < side_margin){
+       opacity = 0;
+    } else if (x > side_margin + img2_width){
+       opacity = 1;
+    } else {
+       opacity = (x - side_margin) / img2_width;
+   }
+    
+    img2.style.opacity = opacity;
+
+});
+</script>
