@@ -16,6 +16,7 @@ img {
    left: 50%;
    top: 50%;
    transform: translate(-50%,-50%);
+   transition-duration: .3s;
 }
 </style>
 <body>
@@ -25,14 +26,11 @@ img {
 <script>
 var img2 = document.getElementById('img2');
 
-document.addEventListener('mousemove', function showCoords(event) {
-
+function pointerMove(e){
     var x = event.clientX;
-    // var y = event.clientY;
     img2_width = img2.offsetWidth;
     side_margin = (window.innerWidth - img2_width)/2;
 
-  // x y to be added and this whole bit to be cleaned but I am not thinking abt math rn
     let opacity = 0;
     if (x < side_margin){
        opacity = 0;
@@ -43,6 +41,7 @@ document.addEventListener('mousemove', function showCoords(event) {
    }
     
     img2.style.opacity = opacity;
-
-});
+}
+onmousemove = pointerMove;
+ontouchmove = pointerMove;
 </script>
